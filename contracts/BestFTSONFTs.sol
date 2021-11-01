@@ -63,9 +63,9 @@ contract BestFTSONFTs is ERC1155SupplyUpgradeable, OwnableUpgradeable  {
     event BoostSet(uint256 indexed tokenId, uint256 dailyBoost, uint256 percentageBoost, uint256 burnBoost, uint256 expires);
     event RoyaltyAddressUpdated(uint256 indexed tokenId, address indexed newAddress, address indexed oldAddress);
     event MinterAdded(address indexed addressAdded, bool mintStatus);
-    event NFTPPriceSet(uint256 indexed tokenId, address indexed vaultWallet, uint256 nftpCost, uint256 qtyAvail, uint256 burnBoost, uint256 expires);
+    event NFTPPriceSet(uint256 indexed tokenId, address indexed vaultWallet, uint256 nftpCost, uint256 qtyAvail, uint256 expires);
     event NFTPClaimed(uint256 indexed tokenId, address indexed claimingAddress, uint256 nftpCost, uint256 qtyClaimed);
-    event BurnBoost(uint256 indexed tokenId, address indexed burningAddress, uint256 totalBonus, uint256 qtyBurned);
+    event BurnBoost(uint256 indexed tokenId, address indexed burningAddress, uint256 qtyBurned, uint256 totalBonus);
 
 // ******************************************* Initiaizer ************************************************************************
 	function initializeContract(string memory _name, string memory _symbol, address[] memory _initialMinters, address _mintAdminInitial, address _nftpAddressInitial) external initializer {
@@ -89,12 +89,8 @@ contract BestFTSONFTs is ERC1155SupplyUpgradeable, OwnableUpgradeable  {
     }
 
 // ******************************************* Setter Functions ************************************************************************
-	function setBoostDetails(uint256 tokenId, uint256 _dailyBoost, uint256 _percentageBoost, uint256 _burnBoost, uint256 _expires) ownerOrAdmin external {
-        boosts[tokenId].dailyBoost = _dailyBoost;
-        boosts[tokenId].percentageBoost = _percentageBoost;
-        boosts[tokenId].burnBoost = _burnBoost;
-        boosts[tokenId].expires = _expires;
-		emit BoostSet(tokenId, _dailyBoost, _percentageBoost, _burnBoost, _expires);
+	function setMintAdmin(address _mintAdminAddress)onlyOwner external {
+		_mintAdmin = _mintAdminAddress;
     }	
 	function setNFTPAddress(address _newNFTPAddress) onlyOwner external {
         _nftpAddress = _newNFTPAddress;
@@ -103,15 +99,26 @@ contract BestFTSONFTs is ERC1155SupplyUpgradeable, OwnableUpgradeable  {
 		canMint[_mintingAddress] = approvalStatus;
 		emit MinterAdded(_mintingAddress, approvalStatus);
     }
-	function setMintAdmin(address _mintAdminAddress)onlyOwner external {
-		_mintAdmin = _mintAdminAddress;
-    }
 	function updateRoyaltyAddress(uint256 tokenIdToUpate, address _newAddress) external {
 			address currentRoyaltyAddress = royalties[tokenIdToUpate].royaltyAddress;
 			require(msg.sender == currentRoyaltyAddress, "Only the current Royalty Address Can Update the Royalty Address");
 			royalties[tokenIdToUpate].royaltyAddress = _newAddress;
 			emit RoyaltyAddressUpdated(tokenIdToUpate, _newAddress, currentRoyaltyAddress);
-    }
+    }	
+	function setBoostDetails(uint256 tokenId, uint256 _dailyBoost, uint256 _percentageBoost, uint256 _burnBoost, uint256 _expires) ownerOrAdmin external {
+        boosts[tokenId].dailyBoost = _dailyBoost;
+        boosts[tokenId].percentageBoost = _percentageBoost;
+        boosts[tokenId].burnBoost = _burnBoost;
+        boosts[tokenId].expires = _expires;
+		emit BoostSet(tokenId, _dailyBoost, _percentageBoost, _burnBoost, _expires);
+    }	
+	function setNFTPDetails(uint256 _tokenId, address _vaultWallet, uint256 _nftpCost, uint256 _qtyAvail, uint256 _expires) ownerOrAdmin external {
+        nftpListings[_tokenId].vaultWallet = _vaultWallet;
+        nftpListings[_tokenId].nftpCost = _nftpCost;
+        nftpListings[_tokenId].qtyAvail = _qtyAvail;
+        nftpListings[_tokenId].expires = _expires;
+		emit NFTPPriceSet(_tokenId, _vaultWallet, _nftpCost, _qtyAvail, _expires);
+    }	
 
 // ******************************************* Getter Functions ************************************************************************
 	function uri(uint256 tokenId) public view override returns (string memory) {
@@ -126,6 +133,10 @@ contract BestFTSONFTs is ERC1155SupplyUpgradeable, OwnableUpgradeable  {
     function getRoyaltyAddress(uint256 _tokenId) public view returns (address) {
         return royalties[_tokenId].royaltyAddress;
     }
+    function getRoyaltyAmount(uint256 _tokenId, uint256 salePrice) public view returns (uint256) {
+        uint256 resultAmount = (royalties[_tokenId].royalty * salePrice)/10000;
+        return resultAmount;
+    }
     function getDailyBoost(uint256 _tokenId) public view returns (uint256) {
         return boosts[_tokenId].dailyBoost;
     }
@@ -134,10 +145,6 @@ contract BestFTSONFTs is ERC1155SupplyUpgradeable, OwnableUpgradeable  {
     }
     function getBoostExpiration(uint256 _tokenId) public view returns (uint256) {
         return boosts[_tokenId].expires;
-    }
-    function getRoyaltyAmount(uint256 _tokenId, uint256 salePrice) public view returns (uint256) {
-        uint256 resultAmount = (royalties[_tokenId].royalty * salePrice)/10000;
-        return resultAmount;
     }
     function getNFTPVaultAddress(uint256 _tokenId) public view returns (address) {
         return nftpListings[_tokenId].vaultWallet;
@@ -195,7 +202,7 @@ contract BestFTSONFTs is ERC1155SupplyUpgradeable, OwnableUpgradeable  {
 		if(bonusNFTP > 0){
 		INFTPContract nftp = INFTPContract(_nftpAddress);
 		nftp.boostMintDirectly(msg.sender, bonusNFTP);
-			emit BurnBoost(_tokenId, msg.sender, bonusNFTP, _qtyToBurn);
+		emit BurnBoost(_tokenId, msg.sender, _qtyToBurn, bonusNFTP);
 		}
     } 
 
