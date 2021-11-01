@@ -2,17 +2,17 @@ import { ethers, upgrades } from 'hardhat';
 import { Contract, ContractFactory } from 'ethers';
 
 async function main(): Promise<void> {
-  // const SGBMarketplaceFactory: ContractFactory = await ethers.getContractFactory('SGBMarketplace');
-  const NFPTContractFactory: ContractFactory = await ethers.getContractFactory('NFTP');
-  const votePowerAddress = '0x02f0826ef6aD107Cfc861152B32B52fD11BaB9ED';
-  const tsoAddress = '0x939789ed3D07A80da886A3E3017d665cBb5591dC';
-  const ftsoManagerAddress = '0xbfA12e4E1411B62EdA8B035d71735667422A6A9e';
-
-  const deployedAddress = ""
-
-  //Deploy Token & Marketplace Contract
-  const nftpContract = await upgrades.deployProxy(NFPTContractFactory, ["Best FTSO NFT Points", "NFTP"], { initializer: 'initializeContract' });
-  console.log('NFTP deployed to: ', nftpContract.address);
+  const BestFTSONFTsFactory: ContractFactory = await ethers.getContractFactory('BestFTSONFTs');
+  const nftpAddress = '0x3B46090e608cBC963356f30857F4DAcC09f5DDC4';
+  const me1 = '';
+  const me2 = '';
+  const riddler1 = '';
+  const riddler2 = '';
+  const listOfMinters: string[] = [me1, me2, riddler1, riddler2];
+  const mintAdmin = '';
+  const deployedAddress = "";
+  const deployedContract = await upgrades.deployProxy(BestFTSONFTsFactory, ["Best FTSO NFT Contract", "BNFT", listOfMinters, mintAdmin, nftpAddress], { initializer: 'initializeContract' });
+  console.log('BestFTSONFTs deployed to: ', deployedContract.address);
 }
 main()
   .then(() => process.exit(0))

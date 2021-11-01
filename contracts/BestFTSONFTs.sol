@@ -19,7 +19,7 @@ interface INFTPContract {
   function boostMintDirectly(address _receivingAddress, uint256 _amountToMint) external;
 }
 
-contract BestFTSONFT1155 is ERC1155SupplyUpgradeable, OwnableUpgradeable  {
+contract BestFTSONFTs is ERC1155SupplyUpgradeable, OwnableUpgradeable  {
     using CountersUpgradeable for CountersUpgradeable.Counter;
     CountersUpgradeable.Counter private _tokenIdCounter;
 	address private _mintAdmin;
