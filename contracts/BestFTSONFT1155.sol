@@ -42,6 +42,7 @@ contract BestFTSONFT1155 is ERC1155SupplyUpgradeable, OwnableUpgradeable  {
         uint256 expires;
     }
     struct NFTPPrices {
+		address vaultWallet;
         uint256 nftpCost;
         uint256 qtyAvail;
         uint256 expires;
@@ -62,7 +63,7 @@ contract BestFTSONFT1155 is ERC1155SupplyUpgradeable, OwnableUpgradeable  {
     event BoostSet(uint256 indexed tokenId, uint256 dailyBoost, uint256 percentageBoost, uint256 burnBoost, uint256 expires);
     event RoyaltyAddressUpdated(uint256 indexed tokenId, address indexed newAddress, address indexed oldAddress);
     event MinterAdded(address indexed addressAdded, bool mintStatus);
-    event NFTPPriceSet(uint256 indexed tokenId, uint256 nftpCost, uint256 qtyAvail, uint256 burnBoost, uint256 expires);
+    event NFTPPriceSet(uint256 indexed tokenId, address indexed vaultWallet, uint256 nftpCost, uint256 qtyAvail, uint256 burnBoost, uint256 expires);
     event NFTPClaimed(uint256 indexed tokenId, address indexed claimingAddress, uint256 nftpCost, uint256 qtyClaimed);
     event BurnBoost(uint256 indexed tokenId, address indexed burningAddress, uint256 totalBonus, uint256 qtyBurned);
 
@@ -108,7 +109,6 @@ contract BestFTSONFT1155 is ERC1155SupplyUpgradeable, OwnableUpgradeable  {
 	function updateRoyaltyAddress(uint256 tokenIdToUpate, address _newAddress) external {
 			address currentRoyaltyAddress = royalties[tokenIdToUpate].royaltyAddress;
 			require(msg.sender == currentRoyaltyAddress, "Only the current Royalty Address Can Update the Royalty Address");
-			royalties[tokenIdToUpate].royalty;
 			royalties[tokenIdToUpate].royaltyAddress = _newAddress;
 			emit RoyaltyAddressUpdated(tokenIdToUpate, _newAddress, currentRoyaltyAddress);
     }
@@ -120,24 +120,36 @@ contract BestFTSONFT1155 is ERC1155SupplyUpgradeable, OwnableUpgradeable  {
     function tokenURI(uint256 tokenId) public view returns (string memory) {
         return tokens[tokenId].uri;
     }  
-    function getCanMint(address _addressToCheck) external view returns (bool) {
+    function getCanMint(address _addressToCheck) public view returns (bool) {
         return canMint[_addressToCheck];
     }
-    function getRoyaltyAddress(uint256 tokenId) external view returns (address) {
-        return royalties[tokenId].royaltyAddress;
+    function getRoyaltyAddress(uint256 _tokenId) public view returns (address) {
+        return royalties[_tokenId].royaltyAddress;
     }
-    function getDailyBoost(uint256 tokenId) external view returns (uint256) {
-        return boosts[tokenId].dailyBoost;
+    function getDailyBoost(uint256 _tokenId) public view returns (uint256) {
+        return boosts[_tokenId].dailyBoost;
     }
-    function getPercentageBoost(uint256 tokenId) external view returns (uint256) {
-        return boosts[tokenId].percentageBoost;
+    function getPercentageBoost(uint256 _tokenId) public view returns (uint256) {
+        return boosts[_tokenId].percentageBoost;
     }
-    function getExpiration(uint256 tokenId) external view returns (uint256) {
-        return boosts[tokenId].expires;
+    function getBoostExpiration(uint256 _tokenId) public view returns (uint256) {
+        return boosts[_tokenId].expires;
     }
-    function getRoyaltyAmount(uint256 tokenId, uint256 salePrice) external view returns (uint256) {
-        uint256 resultAmount = (royalties[tokenId].royalty * salePrice)/10000;
+    function getRoyaltyAmount(uint256 _tokenId, uint256 salePrice) public view returns (uint256) {
+        uint256 resultAmount = (royalties[_tokenId].royalty * salePrice)/10000;
         return resultAmount;
+    }
+    function getNFTPVaultAddress(uint256 _tokenId) public view returns (address) {
+        return nftpListings[_tokenId].vaultWallet;
+    }
+    function getNFTPQTYAvail(uint256 _tokenId) public view returns (uint256) {
+        return nftpListings[_tokenId].qtyAvail;
+    }
+    function getNFTPPrice(uint256 _tokenId) public view returns (uint256) {
+        return nftpListings[_tokenId].nftpCost;
+    }
+    function getNFTPExpires(uint256 _tokenId) public view returns (uint256) {
+        return nftpListings[_tokenId].expires;
     }
 // ******************************************* Mint Functions **************************************************************************
     function mint(string memory newTokenURI, uint256 amount) public returns(uint256) {
