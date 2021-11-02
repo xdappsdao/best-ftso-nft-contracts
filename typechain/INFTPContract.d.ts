@@ -19,43 +19,34 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
-interface ITokenContractInterface extends ethers.utils.Interface {
+interface INFTPContractInterface extends ethers.utils.Interface {
   functions: {
-    "safeBatchTransferFrom(address,address,uint256[])": FunctionFragment;
-    "safeTransferFrom(address,address,uint256,uint256,bytes)": FunctionFragment;
-    "transferFrom(address,address,uint256)": FunctionFragment;
+    "boostMintDirectly(address,uint256)": FunctionFragment;
+    "redeemPoints(address,uint256)": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "safeBatchTransferFrom",
-    values: [string, string, BigNumberish[]]
+    functionFragment: "boostMintDirectly",
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "safeTransferFrom",
-    values: [string, string, BigNumberish, BigNumberish, BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "transferFrom",
-    values: [string, string, BigNumberish]
+    functionFragment: "redeemPoints",
+    values: [string, BigNumberish]
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "safeBatchTransferFrom",
+    functionFragment: "boostMintDirectly",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "safeTransferFrom",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "transferFrom",
+    functionFragment: "redeemPoints",
     data: BytesLike
   ): Result;
 
   events: {};
 }
 
-export class ITokenContract extends BaseContract {
+export class INFTPContract extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -96,77 +87,44 @@ export class ITokenContract extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: ITokenContractInterface;
+  interface: INFTPContractInterface;
 
   functions: {
-    safeBatchTransferFrom(
-      from: string,
-      to: string,
-      ids: BigNumberish[],
+    boostMintDirectly(
+      _receivingAddress: string,
+      _amountToMint: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    safeTransferFrom(
-      from: string,
-      to: string,
-      id: BigNumberish,
-      amount: BigNumberish,
-      data: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    transferFrom(
-      from: string,
-      to: string,
-      tokenId: BigNumberish,
+    redeemPoints(
+      _accountToBurn: string,
+      _amountToBurn: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
 
-  safeBatchTransferFrom(
-    from: string,
-    to: string,
-    ids: BigNumberish[],
+  boostMintDirectly(
+    _receivingAddress: string,
+    _amountToMint: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  safeTransferFrom(
-    from: string,
-    to: string,
-    id: BigNumberish,
-    amount: BigNumberish,
-    data: BytesLike,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  transferFrom(
-    from: string,
-    to: string,
-    tokenId: BigNumberish,
+  redeemPoints(
+    _accountToBurn: string,
+    _amountToBurn: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    safeBatchTransferFrom(
-      from: string,
-      to: string,
-      ids: BigNumberish[],
+    boostMintDirectly(
+      _receivingAddress: string,
+      _amountToMint: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    safeTransferFrom(
-      from: string,
-      to: string,
-      id: BigNumberish,
-      amount: BigNumberish,
-      data: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    transferFrom(
-      from: string,
-      to: string,
-      tokenId: BigNumberish,
+    redeemPoints(
+      _accountToBurn: string,
+      _amountToBurn: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -174,51 +132,29 @@ export class ITokenContract extends BaseContract {
   filters: {};
 
   estimateGas: {
-    safeBatchTransferFrom(
-      from: string,
-      to: string,
-      ids: BigNumberish[],
+    boostMintDirectly(
+      _receivingAddress: string,
+      _amountToMint: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    safeTransferFrom(
-      from: string,
-      to: string,
-      id: BigNumberish,
-      amount: BigNumberish,
-      data: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    transferFrom(
-      from: string,
-      to: string,
-      tokenId: BigNumberish,
+    redeemPoints(
+      _accountToBurn: string,
+      _amountToBurn: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    safeBatchTransferFrom(
-      from: string,
-      to: string,
-      ids: BigNumberish[],
+    boostMintDirectly(
+      _receivingAddress: string,
+      _amountToMint: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    safeTransferFrom(
-      from: string,
-      to: string,
-      id: BigNumberish,
-      amount: BigNumberish,
-      data: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    transferFrom(
-      from: string,
-      to: string,
-      tokenId: BigNumberish,
+    redeemPoints(
+      _accountToBurn: string,
+      _amountToBurn: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

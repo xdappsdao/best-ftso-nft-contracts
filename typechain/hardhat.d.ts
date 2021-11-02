@@ -17,57 +17,93 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.OwnableUpgradeable__factory>;
     getContractFactory(
-      name: "ERC20Upgradeable",
+      name: "ERC1155Upgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.ERC20Upgradeable__factory>;
+    ): Promise<Contracts.ERC1155Upgradeable__factory>;
     getContractFactory(
-      name: "IERC20MetadataUpgradeable",
+      name: "ERC1155BurnableUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC20MetadataUpgradeable__factory>;
+    ): Promise<Contracts.ERC1155BurnableUpgradeable__factory>;
     getContractFactory(
-      name: "IERC20Upgradeable",
+      name: "ERC1155SupplyUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.IERC20Upgradeable__factory>;
+    ): Promise<Contracts.ERC1155SupplyUpgradeable__factory>;
     getContractFactory(
-      name: "DelegationMock",
+      name: "IERC1155MetadataURIUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.DelegationMock__factory>;
+    ): Promise<Contracts.IERC1155MetadataURIUpgradeable__factory>;
     getContractFactory(
-      name: "FTSOManagerMock",
+      name: "IERC1155ReceiverUpgradeable",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.FTSOManagerMock__factory>;
+    ): Promise<Contracts.IERC1155ReceiverUpgradeable__factory>;
+    getContractFactory(
+      name: "IERC1155Upgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC1155Upgradeable__factory>;
+    getContractFactory(
+      name: "ERC1155HolderUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC1155HolderUpgradeable__factory>;
+    getContractFactory(
+      name: "ERC1155ReceiverUpgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC1155ReceiverUpgradeable__factory>;
+    getContractFactory(
+      name: "ERC165Upgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC165Upgradeable__factory>;
+    getContractFactory(
+      name: "IERC165Upgradeable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IERC165Upgradeable__factory>;
+    getContractFactory(
+      name: "Ownable",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Ownable__factory>;
+    getContractFactory(
+      name: "IBeacon",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IBeacon__factory>;
+    getContractFactory(
+      name: "ERC1967Proxy",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC1967Proxy__factory>;
+    getContractFactory(
+      name: "ERC1967Upgrade",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ERC1967Upgrade__factory>;
+    getContractFactory(
+      name: "Proxy",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Proxy__factory>;
+    getContractFactory(
+      name: "ProxyAdmin",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ProxyAdmin__factory>;
+    getContractFactory(
+      name: "TransparentUpgradeableProxy",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.TransparentUpgradeableProxy__factory>;
+    getContractFactory(
+      name: "BestFTSONFTs",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.BestFTSONFTs__factory>;
+    getContractFactory(
+      name: "INFTPContract",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.INFTPContract__factory>;
     getContractFactory(
       name: "Delegation",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Delegation__factory>;
     getContractFactory(
-      name: "FTSOManager",
+      name: "ITokenContract",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.FTSOManager__factory>;
+    ): Promise<Contracts.ITokenContract__factory>;
     getContractFactory(
-      name: "NFTP",
+      name: "NFTClaimTrackerV5",
       signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.NFTP__factory>;
-    getContractFactory(
-      name: "Delegation",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Delegation__factory>;
-    getContractFactory(
-      name: "FTSOManager",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.FTSOManager__factory>;
-    getContractFactory(
-      name: "TestReader",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.TestReader__factory>;
-    getContractFactory(
-      name: "Token",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Token__factory>;
-    getContractFactory(
-      name: "TokenHack",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.TokenHack__factory>;
+    ): Promise<Contracts.NFTClaimTrackerV5__factory>;
 
     // default types
     getContractFactory(

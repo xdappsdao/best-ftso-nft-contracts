@@ -59,6 +59,10 @@ contract BestFTSONFTs is ERC1155SupplyUpgradeable, OwnableUpgradeable  {
     // Mapping from token ID to NFTP Data
     mapping(uint256 => NFTPPrices) public nftpListings;
 
+// ******************************************* Added Vars ************************************************************************
+	string private _name;
+	string private _symbol;
+
 // ******************************************* Events ************************************************************************
     event BoostSet(uint256 indexed tokenId, uint256 dailyBoost, uint256 percentageBoost, uint256 burnBoost, uint256 expires);
     event RoyaltyAddressUpdated(uint256 indexed tokenId, address indexed newAddress, address indexed oldAddress);
@@ -68,12 +72,12 @@ contract BestFTSONFTs is ERC1155SupplyUpgradeable, OwnableUpgradeable  {
     event BurnBoost(uint256 indexed tokenId, address indexed burningAddress, uint256 qtyBurned, uint256 totalBonus);
 
 // ******************************************* Initiaizer ************************************************************************
-	function initializeContract(string memory _name, string memory _symbol, address[] memory _initialMinters, address _mintAdminInitial, address _nftpAddressInitial) external initializer {
+	function initializeContract(string memory _nameInit, string memory _symbolInit, address[] memory _initialMinters, address _mintAdminInitial, address _nftpAddressInitial) external initializer {
 		__ERC1155_init('');
 		__Ownable_init();
 		__ERC1155Supply_init();
-		_name = _name;
-		_symbol = _symbol;
+		_name = _nameInit;
+		_symbol = _symbolInit;
 		_mintAdminInitial = _mintAdminInitial;
 		_nftpAddress = _nftpAddressInitial;
 		for (uint256 i = 0; i < _initialMinters.length; i++) {
@@ -123,6 +127,12 @@ contract BestFTSONFTs is ERC1155SupplyUpgradeable, OwnableUpgradeable  {
 // ******************************************* Getter Functions ************************************************************************
 	function uri(uint256 tokenId) public view override returns (string memory) {
         return tokenURI(tokenId);
+    }
+	function name() public view returns (string memory) {
+        return _name;
+    }
+	function symbol() public view returns (string memory) {
+        return _symbol;
     }
     function tokenURI(uint256 tokenId) public view returns (string memory) {
         return tokens[tokenId].uri;
@@ -194,7 +204,7 @@ contract BestFTSONFTs is ERC1155SupplyUpgradeable, OwnableUpgradeable  {
     }
 
 // ******************************************* Burn Functions **************************************************************************
-	function burn(uint256 _tokenId, uint256 _qtyToBurn) public {
+function burn(uint256 _tokenId, uint256 _qtyToBurn) public {
 		uint256 balance = balanceOf(msg.sender, _tokenId);
 		require(balance >= _qtyToBurn, "You do not have that many tokens to burn");
 		_burn(msg.sender, _tokenId, _qtyToBurn);
