@@ -21,7 +21,7 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface NFTClaimTrackerV5Interface extends ethers.utils.Interface {
   functions: {
-    "claimNFT(uint256,address)": FunctionFragment;
+    "claimNFT(uint256)": FunctionFragment;
     "claimableNFTs(uint256)": FunctionFragment;
     "getBlockRequirements(uint256)": FunctionFragment;
     "getVPRequirements(uint256)": FunctionFragment;
@@ -47,7 +47,7 @@ interface NFTClaimTrackerV5Interface extends ethers.utils.Interface {
 
   encodeFunctionData(
     functionFragment: "claimNFT",
-    values: [BigNumberish, string]
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "claimableNFTs",
@@ -275,7 +275,6 @@ export class NFTClaimTrackerV5 extends BaseContract {
   functions: {
     claimNFT(
       _idToClaim: BigNumberish,
-      _transferFrom: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -396,7 +395,6 @@ export class NFTClaimTrackerV5 extends BaseContract {
 
   claimNFT(
     _idToClaim: BigNumberish,
-    _transferFrom: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -517,7 +515,6 @@ export class NFTClaimTrackerV5 extends BaseContract {
   callStatic: {
     claimNFT(
       _idToClaim: BigNumberish,
-      _transferFrom: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -693,7 +690,6 @@ export class NFTClaimTrackerV5 extends BaseContract {
   estimateGas: {
     claimNFT(
       _idToClaim: BigNumberish,
-      _transferFrom: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -809,7 +805,6 @@ export class NFTClaimTrackerV5 extends BaseContract {
   populateTransaction: {
     claimNFT(
       _idToClaim: BigNumberish,
-      _transferFrom: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
