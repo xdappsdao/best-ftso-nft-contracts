@@ -135,7 +135,7 @@ function hasNotClaimed(address _addressToCheck, uint256 _idToClaim) public view 
 }
 
 // ************************************** Claim Functions ************************************************************************************** */
-function claimNFT(uint256 _idToClaim)whenNotPaused public {
+function claimNFT(uint256 _idToClaim) whenNotPaused external {
 	ClaimableNFT memory nftToClaim = claimableNFTs[_idToClaim];
 	require(hasNotClaimed(msg.sender, _idToClaim), 'Already Claimed');
 	require(meetsRequirements(msg.sender, _idToClaim), 'Vote Power Too Low');
