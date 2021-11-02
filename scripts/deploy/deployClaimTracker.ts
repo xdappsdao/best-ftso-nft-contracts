@@ -2,17 +2,14 @@ import { ethers, upgrades } from 'hardhat';
 import { Contract, ContractFactory } from 'ethers';
 
 async function main(): Promise<void> {
-  const BestFTSONFTsFactory: ContractFactory = await ethers.getContractFactory('BestFTSONFTs');
-  const nftpAddress = '0xba0797b2BCea8de74eb9EC19F6F2bfC05325e77E';
+  const NFTClaimTrackerV5Factory: ContractFactory = await ethers.getContractFactory('NFTClaimTrackerV5');
+  const tsoAddress = '0x939789ed3D07A80da886A3E3017d665cBb5591dC';
   const me1 = '0xba0797b2BCea8de74eb9EC19F6F2bfC05325e77E';
   const riddler1 = '0x4375daBA68D97573efaf2822B98cfaF582C23bAA';
   const votePowerAddress = '0x02f0826ef6aD107Cfc861152B32B52fD11BaB9ED';
-
-  const listOfMinters: string[] = [me1, me2, riddler1, fc];
-  const mintAdmin = '';
-  const deployedAddress = "0xC84490846AFEf9Ca5e70535cE993Fd8e4217F425";
-  const deployedContract = await upgrades.deployProxy(BestFTSONFTsFactory, ["Best FTSO NFT Contract", "BNFT", listOfMinters, riddler1, nftpAddress], { initializer: 'initializeContract' });
-  console.log('BestFTSONFTs deployed to: ', deployedContract.address);
+  const deployedAddress = "";
+  const deployedContract = await upgrades.deployProxy(NFTClaimTrackerV5Factory, [tsoAddress, votePowerAddress, riddler1], { initializer: 'initializeContract' });
+  console.log('ClaimTrackerV5 deployed to: ', deployedContract.address);
 }
 main()
   .then(() => process.exit(0))

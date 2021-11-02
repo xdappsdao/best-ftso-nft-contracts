@@ -23,17 +23,24 @@ interface NFTClaimTrackerV5Interface extends ethers.utils.Interface {
   functions: {
     "claimNFT(uint256,address)": FunctionFragment;
     "claimableNFTs(uint256)": FunctionFragment;
-    "getRequirements(uint256)": FunctionFragment;
+    "getBlockRequirements(uint256)": FunctionFragment;
+    "getVPRequirements(uint256)": FunctionFragment;
     "getVaultWalletAddress(uint256)": FunctionFragment;
     "getVotePowerByAddressBlock(address,uint256)": FunctionFragment;
     "hasNotClaimed(address,uint256)": FunctionFragment;
-    "initialize(address,address,address)": FunctionFragment;
+    "initializeContract(address,address,address)": FunctionFragment;
     "meetsRequirements(address,uint256)": FunctionFragment;
     "owner()": FunctionFragment;
+    "paused()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
+    "setNewClaimableNFT(address,address,uint256,uint256[],uint256[])": FunctionFragment;
     "tokenClaimed(address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "tsoAddress()": FunctionFragment;
+    "updateClaimableNFT(uint256,address,address,uint256,uint256[],uint256[])": FunctionFragment;
+    "updateContractAdmin(address)": FunctionFragment;
+    "updateTSOAddress(address)": FunctionFragment;
+    "updateVotePowerAddress(address)": FunctionFragment;
     "userIsEligible(address,uint256)": FunctionFragment;
     "votePowerAddress()": FunctionFragment;
   };
@@ -47,7 +54,11 @@ interface NFTClaimTrackerV5Interface extends ethers.utils.Interface {
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getRequirements",
+    functionFragment: "getBlockRequirements",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getVPRequirements",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -63,7 +74,7 @@ interface NFTClaimTrackerV5Interface extends ethers.utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "initialize",
+    functionFragment: "initializeContract",
     values: [string, string, string]
   ): string;
   encodeFunctionData(
@@ -71,9 +82,14 @@ interface NFTClaimTrackerV5Interface extends ethers.utils.Interface {
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(functionFragment: "paused", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setNewClaimableNFT",
+    values: [string, string, BigNumberish, BigNumberish[], BigNumberish[]]
   ): string;
   encodeFunctionData(
     functionFragment: "tokenClaimed",
@@ -86,6 +102,29 @@ interface NFTClaimTrackerV5Interface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "tsoAddress",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateClaimableNFT",
+    values: [
+      BigNumberish,
+      string,
+      string,
+      BigNumberish,
+      BigNumberish[],
+      BigNumberish[]
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateContractAdmin",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateTSOAddress",
+    values: [string]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "updateVotePowerAddress",
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "userIsEligible",
@@ -102,7 +141,11 @@ interface NFTClaimTrackerV5Interface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getRequirements",
+    functionFragment: "getBlockRequirements",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getVPRequirements",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -117,14 +160,22 @@ interface NFTClaimTrackerV5Interface extends ethers.utils.Interface {
     functionFragment: "hasNotClaimed",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "initializeContract",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "meetsRequirements",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "paused", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setNewClaimableNFT",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -137,6 +188,22 @@ interface NFTClaimTrackerV5Interface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "tsoAddress", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "updateClaimableNFT",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateContractAdmin",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateTSOAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "updateVotePowerAddress",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "userIsEligible",
     data: BytesLike
   ): Result;
@@ -146,16 +213,20 @@ interface NFTClaimTrackerV5Interface extends ethers.utils.Interface {
   ): Result;
 
   events: {
-    "ClaimableNFTAdded(uint256,address,uint256,tuple[])": EventFragment;
-    "ClaimableNFTUpdated(uint256,address,uint256,tuple[])": EventFragment;
+    "ClaimableNFTAdded(uint256,address,uint256,uint256[],uint256[])": EventFragment;
+    "ClaimableNFTUpdated(uint256,address,uint256,uint256[],uint256[])": EventFragment;
     "NFTClaimed(uint256,address)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
+    "Paused(address)": EventFragment;
+    "Unpaused(address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "ClaimableNFTAdded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ClaimableNFTUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NFTClaimed"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Paused"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Unpaused"): EventFragment;
 }
 
 export class NFTClaimTrackerV5 extends BaseContract {
@@ -219,22 +290,15 @@ export class NFTClaimTrackerV5 extends BaseContract {
       }
     >;
 
-    getRequirements(
+    getBlockRequirements(
       _idToClaim: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<
-      [
-        ([BigNumber, BigNumber] & {
-          blockToCheck: BigNumber;
-          votePowerNeeded: BigNumber;
-        })[]
-      ] & {
-        requirements: ([BigNumber, BigNumber] & {
-          blockToCheck: BigNumber;
-          votePowerNeeded: BigNumber;
-        })[];
-      }
-    >;
+    ): Promise<[BigNumber[]]>;
+
+    getVPRequirements(
+      _idToClaim: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber[]]>;
 
     getVaultWalletAddress(
       _idToClaim: BigNumberish,
@@ -253,7 +317,7 @@ export class NFTClaimTrackerV5 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    initialize(
+    initializeContract(
       _tsoAddress: string,
       _votePowerAddress: string,
       _contractAdmin: string,
@@ -268,7 +332,18 @@ export class NFTClaimTrackerV5 extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
+    paused(overrides?: CallOverrides): Promise<[boolean]>;
+
     renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setNewClaimableNFT(
+      _vaultWallet: string,
+      _claimableContract: string,
+      _tokenId: BigNumberish,
+      _blockReqs: BigNumberish[],
+      _vpReqs: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -284,6 +359,31 @@ export class NFTClaimTrackerV5 extends BaseContract {
     ): Promise<ContractTransaction>;
 
     tsoAddress(overrides?: CallOverrides): Promise<[string]>;
+
+    updateClaimableNFT(
+      _idToUpdate: BigNumberish,
+      _vaultWallet: string,
+      _claimableContract: string,
+      _tokenId: BigNumberish,
+      _blockReqs: BigNumberish[],
+      _vpReqs: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    updateContractAdmin(
+      _newAdmin: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    updateTSOAddress(
+      _newTSOAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    updateVotePowerAddress(
+      _newVPA: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     userIsEligible(
       _addressToCheck: string,
@@ -311,15 +411,15 @@ export class NFTClaimTrackerV5 extends BaseContract {
     }
   >;
 
-  getRequirements(
+  getBlockRequirements(
     _idToClaim: BigNumberish,
     overrides?: CallOverrides
-  ): Promise<
-    ([BigNumber, BigNumber] & {
-      blockToCheck: BigNumber;
-      votePowerNeeded: BigNumber;
-    })[]
-  >;
+  ): Promise<BigNumber[]>;
+
+  getVPRequirements(
+    _idToClaim: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber[]>;
 
   getVaultWalletAddress(
     _idToClaim: BigNumberish,
@@ -338,7 +438,7 @@ export class NFTClaimTrackerV5 extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  initialize(
+  initializeContract(
     _tsoAddress: string,
     _votePowerAddress: string,
     _contractAdmin: string,
@@ -353,7 +453,18 @@ export class NFTClaimTrackerV5 extends BaseContract {
 
   owner(overrides?: CallOverrides): Promise<string>;
 
+  paused(overrides?: CallOverrides): Promise<boolean>;
+
   renounceOwnership(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setNewClaimableNFT(
+    _vaultWallet: string,
+    _claimableContract: string,
+    _tokenId: BigNumberish,
+    _blockReqs: BigNumberish[],
+    _vpReqs: BigNumberish[],
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -369,6 +480,31 @@ export class NFTClaimTrackerV5 extends BaseContract {
   ): Promise<ContractTransaction>;
 
   tsoAddress(overrides?: CallOverrides): Promise<string>;
+
+  updateClaimableNFT(
+    _idToUpdate: BigNumberish,
+    _vaultWallet: string,
+    _claimableContract: string,
+    _tokenId: BigNumberish,
+    _blockReqs: BigNumberish[],
+    _vpReqs: BigNumberish[],
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  updateContractAdmin(
+    _newAdmin: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  updateTSOAddress(
+    _newTSOAddress: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  updateVotePowerAddress(
+    _newVPA: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   userIsEligible(
     _addressToCheck: string,
@@ -396,15 +532,15 @@ export class NFTClaimTrackerV5 extends BaseContract {
       }
     >;
 
-    getRequirements(
+    getBlockRequirements(
       _idToClaim: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<
-      ([BigNumber, BigNumber] & {
-        blockToCheck: BigNumber;
-        votePowerNeeded: BigNumber;
-      })[]
-    >;
+    ): Promise<BigNumber[]>;
+
+    getVPRequirements(
+      _idToClaim: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber[]>;
 
     getVaultWalletAddress(
       _idToClaim: BigNumberish,
@@ -423,7 +559,7 @@ export class NFTClaimTrackerV5 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    initialize(
+    initializeContract(
       _tsoAddress: string,
       _votePowerAddress: string,
       _contractAdmin: string,
@@ -438,7 +574,18 @@ export class NFTClaimTrackerV5 extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<string>;
 
+    paused(overrides?: CallOverrides): Promise<boolean>;
+
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    setNewClaimableNFT(
+      _vaultWallet: string,
+      _claimableContract: string,
+      _tokenId: BigNumberish,
+      _blockReqs: BigNumberish[],
+      _vpReqs: BigNumberish[],
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     tokenClaimed(
       arg0: string,
@@ -452,6 +599,31 @@ export class NFTClaimTrackerV5 extends BaseContract {
     ): Promise<void>;
 
     tsoAddress(overrides?: CallOverrides): Promise<string>;
+
+    updateClaimableNFT(
+      _idToUpdate: BigNumberish,
+      _vaultWallet: string,
+      _claimableContract: string,
+      _tokenId: BigNumberish,
+      _blockReqs: BigNumberish[],
+      _vpReqs: BigNumberish[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateContractAdmin(
+      _newAdmin: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateTSOAddress(
+      _newTSOAddress: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    updateVotePowerAddress(
+      _newVPA: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     userIsEligible(
       _addressToCheck: string,
@@ -467,25 +639,16 @@ export class NFTClaimTrackerV5 extends BaseContract {
       itemId?: BigNumberish | null,
       claimableContract?: string | null,
       tokenId?: BigNumberish | null,
-      requirements?: null
+      blockReqs?: null,
+      vpReqs?: null
     ): TypedEventFilter<
-      [
-        BigNumber,
-        string,
-        BigNumber,
-        ([BigNumber, BigNumber] & {
-          blockToCheck: BigNumber;
-          votePowerNeeded: BigNumber;
-        })[]
-      ],
+      [BigNumber, string, BigNumber, BigNumber[], BigNumber[]],
       {
         itemId: BigNumber;
         claimableContract: string;
         tokenId: BigNumber;
-        requirements: ([BigNumber, BigNumber] & {
-          blockToCheck: BigNumber;
-          votePowerNeeded: BigNumber;
-        })[];
+        blockReqs: BigNumber[];
+        vpReqs: BigNumber[];
       }
     >;
 
@@ -493,25 +656,16 @@ export class NFTClaimTrackerV5 extends BaseContract {
       itemUpdated?: BigNumberish | null,
       claimableContract?: string | null,
       tokenId?: BigNumberish | null,
-      requirements?: null
+      blockReqs?: null,
+      vpReqs?: null
     ): TypedEventFilter<
-      [
-        BigNumber,
-        string,
-        BigNumber,
-        ([BigNumber, BigNumber] & {
-          blockToCheck: BigNumber;
-          votePowerNeeded: BigNumber;
-        })[]
-      ],
+      [BigNumber, string, BigNumber, BigNumber[], BigNumber[]],
       {
         itemUpdated: BigNumber;
         claimableContract: string;
         tokenId: BigNumber;
-        requirements: ([BigNumber, BigNumber] & {
-          blockToCheck: BigNumber;
-          votePowerNeeded: BigNumber;
-        })[];
+        blockReqs: BigNumber[];
+        vpReqs: BigNumber[];
       }
     >;
 
@@ -530,6 +684,10 @@ export class NFTClaimTrackerV5 extends BaseContract {
       [string, string],
       { previousOwner: string; newOwner: string }
     >;
+
+    Paused(account?: null): TypedEventFilter<[string], { account: string }>;
+
+    Unpaused(account?: null): TypedEventFilter<[string], { account: string }>;
   };
 
   estimateGas: {
@@ -544,7 +702,12 @@ export class NFTClaimTrackerV5 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getRequirements(
+    getBlockRequirements(
+      _idToClaim: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getVPRequirements(
       _idToClaim: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -566,7 +729,7 @@ export class NFTClaimTrackerV5 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    initialize(
+    initializeContract(
       _tsoAddress: string,
       _votePowerAddress: string,
       _contractAdmin: string,
@@ -581,7 +744,18 @@ export class NFTClaimTrackerV5 extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
+    paused(overrides?: CallOverrides): Promise<BigNumber>;
+
     renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setNewClaimableNFT(
+      _vaultWallet: string,
+      _claimableContract: string,
+      _tokenId: BigNumberish,
+      _blockReqs: BigNumberish[],
+      _vpReqs: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -597,6 +771,31 @@ export class NFTClaimTrackerV5 extends BaseContract {
     ): Promise<BigNumber>;
 
     tsoAddress(overrides?: CallOverrides): Promise<BigNumber>;
+
+    updateClaimableNFT(
+      _idToUpdate: BigNumberish,
+      _vaultWallet: string,
+      _claimableContract: string,
+      _tokenId: BigNumberish,
+      _blockReqs: BigNumberish[],
+      _vpReqs: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    updateContractAdmin(
+      _newAdmin: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    updateTSOAddress(
+      _newTSOAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    updateVotePowerAddress(
+      _newVPA: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     userIsEligible(
       _addressToCheck: string,
@@ -619,7 +818,12 @@ export class NFTClaimTrackerV5 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getRequirements(
+    getBlockRequirements(
+      _idToClaim: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getVPRequirements(
       _idToClaim: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -641,7 +845,7 @@ export class NFTClaimTrackerV5 extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    initialize(
+    initializeContract(
       _tsoAddress: string,
       _votePowerAddress: string,
       _contractAdmin: string,
@@ -656,7 +860,18 @@ export class NFTClaimTrackerV5 extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    paused(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     renounceOwnership(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setNewClaimableNFT(
+      _vaultWallet: string,
+      _claimableContract: string,
+      _tokenId: BigNumberish,
+      _blockReqs: BigNumberish[],
+      _vpReqs: BigNumberish[],
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -672,6 +887,31 @@ export class NFTClaimTrackerV5 extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     tsoAddress(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    updateClaimableNFT(
+      _idToUpdate: BigNumberish,
+      _vaultWallet: string,
+      _claimableContract: string,
+      _tokenId: BigNumberish,
+      _blockReqs: BigNumberish[],
+      _vpReqs: BigNumberish[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateContractAdmin(
+      _newAdmin: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateTSOAddress(
+      _newTSOAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    updateVotePowerAddress(
+      _newVPA: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     userIsEligible(
       _addressToCheck: string,

@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export type { OwnableUpgradeable } from "./OwnableUpgradeable";
+export type { PausableUpgradeable } from "./PausableUpgradeable";
 export type { ERC1155Upgradeable } from "./ERC1155Upgradeable";
 export type { ERC1155BurnableUpgradeable } from "./ERC1155BurnableUpgradeable";
 export type { ERC1155SupplyUpgradeable } from "./ERC1155SupplyUpgradeable";
@@ -26,6 +27,7 @@ export type { ITokenContract } from "./ITokenContract";
 export type { NFTClaimTrackerV5 } from "./NFTClaimTrackerV5";
 
 export { OwnableUpgradeable__factory } from "./factories/OwnableUpgradeable__factory";
+export { PausableUpgradeable__factory } from "./factories/PausableUpgradeable__factory";
 export { ERC1155Upgradeable__factory } from "./factories/ERC1155Upgradeable__factory";
 export { ERC1155BurnableUpgradeable__factory } from "./factories/ERC1155BurnableUpgradeable__factory";
 export { ERC1155SupplyUpgradeable__factory } from "./factories/ERC1155SupplyUpgradeable__factory";

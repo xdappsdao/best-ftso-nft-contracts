@@ -50,7 +50,7 @@ address public votePowerAddress;
  event ClaimableNFTUpdated(uint256 indexed itemUpdated, address indexed claimableContract, uint256 indexed tokenId, uint256[] blockReqs, uint256[] vpReqs);
 
 // ************************************** Contract Initializer ******************************************************************************** */
-function initialize(address _tsoAddress, address _votePowerAddress, address _contractAdmin) external initializer {
+function initializeContract(address _tsoAddress, address _votePowerAddress, address _contractAdmin) external initializer {
 	__Ownable_init();
 	__Pausable_init();
 	tsoAddress = _tsoAddress;  
@@ -135,12 +135,12 @@ function hasNotClaimed(address _addressToCheck, uint256 _idToClaim) public view 
 }
 
 // ************************************** Claim Functions ************************************************************************************** */
-function claimNFT(uint256 _idToClaim, address _transferFrom)whenNotPaused public {
+function claimNFT(uint256 _idToClaim)whenNotPaused public {
 	ClaimableNFT memory nftToClaim = claimableNFTs[_idToClaim];
 	require(hasNotClaimed(msg.sender, _idToClaim), 'Already Claimed');
 	require(meetsRequirements(msg.sender, _idToClaim), 'Vote Power Too Low');
 	ITokenContract tokenContract = ITokenContract(nftToClaim.claimableContract);
-	tokenContract.safeTransferFrom(_transferFrom, msg.sender, nftToClaim.tokenId, 1, '');
+	tokenContract.safeTransferFrom(nftToClaim.vaultWallet, msg.sender, nftToClaim.tokenId, 1, '');
 	tokenClaimed[msg.sender][_idToClaim] = true;
 	emit NFTClaimed(_idToClaim, msg.sender);
 }
